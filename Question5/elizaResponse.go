@@ -11,17 +11,20 @@ import (
 func ElizaResponse(input string) string {
 
 	if matched, _ := regexp.MatchString(`(?i).*\bfather\b.*`, input); matched {
-		return "Why don’t you tell me more about your father?"
+		return "Why don't you tell me more about your father?"
 	}
 
 	// re := regexp.MustCompile(`(?i)I am [^.?!]*[.?!]?`)    ([^.?!]*)[.?!]?
-	re := regexp.MustCompile(`(?i).*\bI'?’?\s*a?m \b([^.?!]*)[.?!]?`)
+	re := regexp.MustCompile(`(?i).*\bI'?\s*a?m \b([^.?!]*)[.?!]?`)
 	if matched := re.MatchString(input); matched {
-		return re.ReplaceAllString(input, "How do you know you are $1?")
+		subMatch := re.ReplaceAllString(input, "$1?")
+		reflectedString := Reflect(subMatch)
+		// return re.ReplaceAllString(input, "How do you know you are $1?")
+		return "How do you know you are " + reflectedString
 	}
 
 	responses := []string{
-		"I’m not sure what you’re trying to say. Could you explain it to me?",
+		"I'm not sure what you're trying to say. Could you explain it to me?",
 		"How does that make you feel?",
 		"Why do you say that?",
 	}
@@ -33,27 +36,71 @@ func ElizaResponse(input string) string {
 
 func Reflect(input string) string {
 	// Split the input on word boundaries.
-	boundaries := regexp.MustCompile(`\b`)
+	boundaries := regexp.MustCompile(`\b.*'?.*\b`)
 	tokens := boundaries.Split(input, -1)
+
+	// Some key prepositions
+	prepositions := []string{
+		"to",
+		"by",
+		"under",
+		"about",
+		"on",
+		"according",
+		"over",
+		"of",
+		"without",
+	}
 
 	// List the reflections.
 	reflections := [][]string{
+		{`was`, `were`},
 		{`I`, `you`},
-		{`me`, `you`},
-		{`you`, `me`},
+		{`I'm`, `you are`},
+		{`I'd`, `you would`},
+		{`I've`, `you have`},
+		{`I'll`, `you will`},
 		{`my`, `your`},
+		{`you're`, `I am`},
+		{`were`, `was`},
+		{`you've`, `I have`},
+		{`you'll`, `I will`},
 		{`your`, `my`},
+		{`yours`, `mine`},
+		// {`you`, `me`},
+		{`me`, `you`},
 	}
 
 	// Loop through each token, reflecting it if there's a match.
 	for i, token := range tokens {
 		for _, reflection := range reflections {
-			if matched, _ := regexp.MatchString(reflection[0], token); matched {
+
+			// Let's take 'you' separately because it is the same as subject pronoun as object pronoun
+			if token == "you" {
+
+				// Loop through the prepositions
+				for j, preposition := range prepositions {
+					// Compare the previous word, that is 'token[i-2]' to the 'preposition'. 'token[i-1]' is the space character.
+					if tokens[i-2] == preposition {
+						// If 'you' is an object pronoun to a preposition, the swap it for 'me'
+						tokens[i] = "me"
+						break
+					}
+
+					// The previous word was not a preposition, swapping for a subject pronoun
+					if j == len(prepositions)-1 {
+						tokens[i] = "I"
+					}
+
+				} // for j, prepostition
+				// As for the rest of reflections, keep doing the normal substitution
+			} else if matched, _ := regexp.MatchString(reflection[0], token); matched {
 				tokens[i] = reflection[1]
 				break
-			}
-		}
-	}
+			} // if - else if
+
+		} // for 'reflection'
+	} // for 'i'
 
 	// Put the tokens back together.
 	return strings.Join(tokens, ``)
@@ -70,12 +117,12 @@ func main() {
 	fmt.Println(ElizaResponse("Father was a teacher."))
 	fmt.Println()
 
-	fmt.Println("I was my father’s favourite.")
-	fmt.Println(ElizaResponse("I was my father’s favourite."))
+	fmt.Println("I was my father's favourite.")
+	fmt.Println(ElizaResponse("I was my father's favourite."))
 	fmt.Println()
 
-	fmt.Println("I’m looking forward to the weekend.")
-	fmt.Println(ElizaResponse("I’m looking forward to the weekend."))
+	fmt.Println("I'm looking forward to the weekend.")
+	fmt.Println(ElizaResponse("I'm looking forward to the weekend."))
 	fmt.Println()
 
 	fmt.Println("My grandfather was French!")
@@ -94,28 +141,28 @@ func main() {
 	fmt.Println(ElizaResponse("I am not sure that you understand the effect that your questions are having on me."))
 	fmt.Println()
 
-	fmt.Println("I am supposed to just take what you’re saying at face value?")
-	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println("I am supposed to just take what you're saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you're saying at face value?"))
 	fmt.Println()
 
-	fmt.Println("I'm supposed to just take what you’re saying at face value?")
-	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println("I'm supposed to just take what you're saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you're saying at face value?"))
 	fmt.Println()
 
-	fmt.Println("Im supposed to just take what you’re saying at face value?")
-	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println("Im supposed to just take what you're saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you're saying at face value?"))
 	fmt.Println()
 
-	fmt.Println("i am supposed to just take what you’re saying at face value?")
-	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println("i am supposed to just take what you're saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you're saying at face value?"))
 	fmt.Println()
 
-	fmt.Println("i'm supposed to just take what you’re saying at face value?")
-	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println("i'm supposed to just take what you're saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you're saying at face value?"))
 	fmt.Println()
 
-	fmt.Println("im supposed to just take what you’re saying at face value?")
-	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println("im supposed to just take what you're saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you're saying at face value?"))
 	fmt.Println()
 
 }
