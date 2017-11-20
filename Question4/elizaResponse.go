@@ -13,8 +13,8 @@ func ElizaResponse(input string) string {
 		return "Why don’t you tell me more about your father?"
 	}
 
-	// re := regexp.MustCompile(`(?i)I am [^.?!]*[.?!]?`)
-	re := regexp.MustCompile(`(?i)\bI'?’?\s*a?m\b`)
+	// re := regexp.MustCompile(`(?i)I am [^.?!]*[.?!]?`)    ([^.?!]*)[.?!]?
+	re := regexp.MustCompile(`(?i).*\bI'?’?\s*a?m \b([^.?!]*)[.?!]?`)
 	if matched := re.MatchString(input); matched {
 		return re.ReplaceAllString(input, "How do you know you are $1?")
 	}
