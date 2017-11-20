@@ -13,7 +13,8 @@ func ElizaResponse(input string) string {
 		return "Why don’t you tell me more about your father?"
 	}
 
-	re := regexp.MustCompile(`(?i)I am [^.?!]*[.?!]?`)
+	// re := regexp.MustCompile(`(?i)I am [^.?!]*[.?!]?`)
+	re := regexp.MustCompile(`(?i)\bI'?’?\s*a?m\b`)
 	if matched := re.MatchString(input); matched {
 		return re.ReplaceAllString(input, "How do you know you are $1?")
 	}
@@ -65,6 +66,26 @@ func main() {
 	fmt.Println()
 
 	fmt.Println("I am supposed to just take what you’re saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println()
+
+	fmt.Println("I'm supposed to just take what you’re saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println()
+
+	fmt.Println("Im supposed to just take what you’re saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println()
+
+	fmt.Println("i am supposed to just take what you’re saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println()
+
+	fmt.Println("i'm supposed to just take what you’re saying at face value?")
+	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
+	fmt.Println()
+
+	fmt.Println("im supposed to just take what you’re saying at face value?")
 	fmt.Println(ElizaResponse("I am supposed to just take what you’re saying at face value?"))
 	fmt.Println()
 
