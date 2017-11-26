@@ -36,8 +36,10 @@ func ElizaResponse(input string) string {
 
 func Reflect(input string) string {
 	// Split the input on word boundaries.
-	boundaries := regexp.MustCompile(`\b.*'?.*\b`)
+	boundaries := regexp.MustCompile(`\s`)
 	tokens := boundaries.Split(input, -1)
+
+	// log.Println("DEBUG: Reflect: tokens: ", tokens)
 
 	// Some key prepositions
 	prepositions := []string{
@@ -103,7 +105,8 @@ func Reflect(input string) string {
 	} // for 'i'
 
 	// Put the tokens back together.
-	return strings.Join(tokens, ``)
+	// log.Println("DEBUG: Reflect: tokens: ", tokens)
+	return strings.Join(tokens, ` `)
 }
 
 func main() {
