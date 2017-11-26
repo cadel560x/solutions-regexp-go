@@ -10,10 +10,12 @@ import (
 
 func ElizaResponse(input string) string {
 
+	// e.g. My father is a doctor.
 	if matched, _ := regexp.MatchString(`(?i).*\bfather\b.*`, input); matched {
 		return "Why don't you tell me more about your father?"
 	}
 
+	// e.g. I am sad.
 	re := regexp.MustCompile(`(?i).*\bI'?\s*a?m \b([^.?!]*)[.?!]?`)
 	if matched := re.MatchString(input); matched {
 		subMatch := re.ReplaceAllString(input, "$1?")
@@ -21,6 +23,7 @@ func ElizaResponse(input string) string {
 		return "How do you know you are " + reflectedString
 	}
 
+	// e.g. I have lots of friends
 	re = regexp.MustCompile(`(?i)^\s*I have ([^.!?]*)[.!?\s]*$`)
 	if matched := re.MatchString(input); matched {
 		subMatch := re.ReplaceAllString(input, "$1?")
@@ -28,6 +31,7 @@ func ElizaResponse(input string) string {
 		return "Why do you tell me that you've " + reflectedString
 	}
 
+	// e.g. I don't care
 	re = regexp.MustCompile(`(?i)^\s*I don't ([^.!?]*)[.!?\s]*$`)
 	if matched := re.MatchString(input); matched {
 		subMatch := re.ReplaceAllString(input, "$1?")
@@ -35,6 +39,7 @@ func ElizaResponse(input string) string {
 		return "Don't you really " + reflectedString
 	}
 
+	// e.g. I feel strange
 	re = regexp.MustCompile(`(?i)^\s*I feel ([^.!?]*)[.!?\s]*$`)
 	if matched := re.MatchString(input); matched {
 		subMatch := re.ReplaceAllString(input, "$1")
@@ -42,6 +47,7 @@ func ElizaResponse(input string) string {
 		return "When you feel " + reflectedString + ", what do you do?"
 	}
 
+	// e.g. Anything else.
 	responses := []string{
 		"I'm not sure what you're trying to say. Could you explain it to me?",
 		"How does that make you feel?",
