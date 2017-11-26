@@ -157,6 +157,7 @@ func main() {
 	fmt.Println(ElizaResponse("My grandfather was French!"))
 	fmt.Println()
 
+	// I am and variations: I'm Im i'm im
 	fmt.Println("I am happy.")
 	fmt.Println(ElizaResponse("I am happy."))
 	fmt.Println()
